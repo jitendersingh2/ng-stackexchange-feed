@@ -1,16 +1,20 @@
+<form class="search" (ngSubmit)="search($event)">
+  <input type="text" class="searchTerm" placeholder="Search Stack Overflow.." name="search" [(ngModel)]="searchText">
+  <input type="submit" class="searchButton">
+</form>
+
 <h1>Questions</h1>
 
-<ul [@listStagger]="questions$">
-  <li *ngFor="let question of questions$">
-    <a routerLink="/answers/{{question.question_id}}">{{question.title}}</a>
+<ul [@listStagger]="questions$.items" *ngIf="questions$.items">
+  <li *ngFor="let question of questions$.items" (click)="routeToAnswers(question.question_id, question.title)">
+    <a>{{question.title}}</a>
 
     <ul>
       <li><span>Score:</span> {{ question.score }}</li>
       <li><span>Answers:</span> {{ question.answer_count }}</li>
       <li><span>Number of Views:</span> {{ question.view_count }}</li>
       <li><span>Tags:</span> {{ question.tags.join(', ') }}</li>
-      <li><span>Created:</span> {{ question.creation_date | date }}</li>
-      <!-- <li><a href="http://{{ question.website }}" target="_blank">{{ question.website }}</a></li> -->
+      <li><span>Creation Date:</span> {{ question.creation_date * 1000 | date:['hh:mm:ss a dd MMM, yyyy'] }}</li>
     </ul>
   </li>
 </ul>

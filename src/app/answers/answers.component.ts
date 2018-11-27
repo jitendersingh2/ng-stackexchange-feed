@@ -34,16 +34,18 @@ import { trigger,style,transition,animate,keyframes,query,stagger } from '@angul
 })
 export class AnswersComponent implements OnInit {
 
-  answers$: Array<Object>;
+  answers$: Object = {};
   questionId$: String;
+  questionTitle: any = '';
   
   constructor(private data: DataService, private route: ActivatedRoute) { 
     this.route.params.subscribe( params => this.questionId$ = params.id);
+    this.questionTitle = this.route.snapshot.queryParams.title;
   }
 
   ngOnInit() {
     this.data.getAnswers(this.questionId$).subscribe((answers) => {
-      this.answers$ = answers.items;
+      this.answers$ = answers;
     })
   }
 

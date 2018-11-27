@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { trigger,style,transition,animate,keyframes,query,stagger } from '@angular/animations';
 
 @Component({
@@ -33,14 +34,42 @@ import { trigger,style,transition,animate,keyframes,query,stagger } from '@angul
 })
 export class QuestionsComponent implements OnInit {
 
-  questions$: Array<Object>;
+  questions$: Object = {};
+  searchText: String = '';
+  routeParams: any = {};
   
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private activatedRoute: ActivatedRoute, private router: Router) { 
+    this.routeParams = this.activatedRoute.snapshot.queryParams;
+  }
 
   ngOnInit() {
-    this.data.getQuestions().subscribe((questions) => {
-      this.questions$ = questions.items;
-    })
+    const tags = this.activatedRoute.snapshot.queryParams.tags ? this.activatedRoute.snapshot.queryParams.tags : '';
+    this.searchText = tags; 
+    this.data.getQuestions(tags).subscribe((questions) => {
+      this.questions$ = questions;
+    });
+  }
+
+  routeToAnswers(id, title) {
+    this.routeParams = {...this.routeParams, title};
+    this.router.navigate([`/answers/${id}`], { queryParams: this.routeParams });
+  }
+
+  search(e) {
+    e.preventDefault();
+
+    const tags= this.searchText;
+    const queryParams = Object.assign({}, this.activatedRoute.snapshot.queryParams);
+    if (tags && tags.length > 0) {
+      queryParams['tags'] = tags;
+    }
+
+    this.routeParams = queryParams;
+    this.router.navigate(['.'], { queryParams: this.routeParams });
+
+    this.data.getQuestions(tags).subscribe((questions) => {
+      this.questions$ = questions;
+    });
   }
 
 }
