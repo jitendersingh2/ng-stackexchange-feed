@@ -1,0 +1,14 @@
+<div *ngIf="answers$">
+  <h1>Answers</h1>
+  <p *ngIf="answers$ && answers$.length === 0">No Answer Found</p>
+
+  <ul [@listStagger]="answers$">
+    <li *ngFor="let answer of answers$">
+      <ul>
+        <li>Score: {{ answer.score }}</li>
+        <li>Created: {{ answer.creation_date | date }}</li>
+        <li>Accepted: {{ answer.is_accepted ? 'YES' : 'NO' }}</li>
+      </ul>
+    </li>
+  </ul>
+</div>

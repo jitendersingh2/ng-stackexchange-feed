@@ -1,0 +1,16 @@
+<h1>Questions</h1>
+
+<ul [@listStagger]="questions$">
+  <li *ngFor="let question of questions$">
+    <a routerLink="/answers/{{question.question_id}}">{{question.title}}</a>
+
+    <ul>
+      <li><span>Score:</span> {{ question.score }}</li>
+      <li><span>Answers:</span> {{ question.answer_count }}</li>
+      <li><span>Number of Views:</span> {{ question.view_count }}</li>
+      <li><span>Tags:</span> {{ question.tags.join(', ') }}</li>
+      <li><span>Created:</span> {{ question.creation_date | date }}</li>
+      <!-- <li><a href="http://{{ question.website }}" target="_blank">{{ question.website }}</a></li> -->
+    </ul>
+  </li>
+</ul>
